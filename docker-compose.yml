@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fixit-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: fixit_user
+      POSTGRES_PASSWORD: /run/secrets/db_password
+      POSTGRES_DB: fixit_db
+    ports:
+      - "5432:5432"
+    secrets:
+    - db_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+secrets:
+  db_password:
+    file: ./db_password.txt
+    
+volumes:
+  pgdata:

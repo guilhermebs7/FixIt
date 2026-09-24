@@ -1,0 +1,9 @@
+
+generator client {
+  provider = "prisma-client-js"   //isso diz : prisma gere pra mim um código Js/ts que eu possa usar para conversar com o banco  de dados.
+}
+
+datasource db {
+  provider = "postgresql"                //agora estamos dizendo qual banco de dados o prisma vai utilizar 
+  url      = env("DATABASE_URL")          // a url para acessar meu bd está guardada em uma variável de ambiente  chamada DATABASE_URL
+}

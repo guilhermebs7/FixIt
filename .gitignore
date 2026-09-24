@@ -1,0 +1,23 @@
+# Dependências
+node_modules/
+
+# Compilação / Build
+dist/
+
+# Variáveis de Ambiente e Segredos
+.env
+.env.*
+db_password.txt
+*.pem
+*.key
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Configurações de IDE / Sistema
+.vscode/
+.idea/
+.DS_Store
+/src/generated/prisma
