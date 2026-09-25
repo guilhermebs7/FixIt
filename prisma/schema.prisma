@@ -1,9 +1,99 @@
 
 generator client {
-  provider = "prisma-client-js"   //isso diz : prisma gere pra mim um código Js/ts que eu possa usar para conversar com o banco  de dados.
+  provider = "prisma-client-js"   //isso diz : prisma gere pra mim um codigo Js/ts que eu possa usar para conversar com o banco  de dados.
 }
 
 datasource db {
   provider = "postgresql"                //agora estamos dizendo qual banco de dados o prisma vai utilizar 
-  url      = env("DATABASE_URL")          // a url para acessar meu bd está guardada em uma variável de ambiente  chamada DATABASE_URL
+  url      = env("DATABASE_URL")          // a url para acessar meu bd esta guardada em uma variavel de ambiente  chamada DATABASE_URL
 }
+
+enum Role{
+  ADMINISTRADOR
+  TECNICO
+  USUARIO
+}
+
+enum Prioridade{
+  Baixa
+  MEDIA
+  HIGH
+}
+
+enum TicketStatus{
+  ABERTO
+  EM_PROGRESSO
+  COMPLETO
+  CANCELADO
+}
+
+model User{
+  id        String  @id @default(uuid())      // se eu n informar o id, o Prisma vai gerar automaticamnete em UUID
+  nome      String 
+  email     String  @unique
+  password  String 
+  role      Role    @default(USUARIO)      //se eu criar um usuario e n informar a role,automaticamente sera user.
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt        //registra quando o usuario foi atualizado pela ultima vez 
+
+  requestedTickets Ticket[]  @relation("TicketRequester")    //um usuario pode ter varios Tickets que ele solicitou. o [] significa lista/varios. o @relation serve para dar nome ao relacionamento
+  assignedTickets  Ticket[]  @relation("TicketTechnician")   //um usuario pode ter varios tickests atribiidos a ele(so que agora ele n abriu o chamado ele e o responsavel pelo atendimento)
+  maintenances  Manutencao[]     // aqui nao precisamos de @relation porque o prisma consegue mapear apenas uma relacao entre user e maintenance . Na Tabela Tickests o User aparece 2 vezes como o tecninco e o usuario
+
+  @@map("users")   // no banco de dados ,quero que essa tabela se chame "users".
+
+}
+
+model Equipamento{
+  id String @Id @default(uuid())
+  nome String 
+  tombamento String @Unique 
+  tipo String 
+  marca String
+  modelo String
+  localizacao String
+  status String  @default("ATIVO")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickest Ticket[]
+
+  @@map("equipamentos")
+}
+
+model Ticket{
+  id   String
+  titulo String
+  descricao String 
+  prioridade Prioridade @default(MEDIA)
+  status TicketStatus @default(ABERTO)
+  equipamentoId String
+  solicitanteId String
+  tecnincoId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  equipamento Equipamento @relation(fields: [equipamentoId], references:[id])    //fields: qual campo do model autal estou usando para fazer a ligacao , references: qual campo do outro model esse equipmentId esta apontando
+  solicitante User @relation("TicketRequester", fields: [solicitanteId], references:[id])
+  tecninco    User? @relacionamento("TicketTechnician", fields: [tecnincoId], references:[id])
+  manutencoes Manutencao[]
+
+  @@map("tickets")
+}
+
+model Manutencao{
+  id  String @id @default(uuid())
+  ticketId String
+  tecnicoId String 
+  descricao String 
+  custo     float
+  startedAt  DateTime
+  finishedAt DateTime
+  createdAt  DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references:[id])
+  tecninco User @relation(fields: [tecnicoId], references: [id])
+
+  @@map("manutencoes")
+}
+
