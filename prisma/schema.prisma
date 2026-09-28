@@ -45,9 +45,9 @@ model User{
 }
 
 model Equipamento{
-  id String @Id @default(uuid())
+  id String @id @default(uuid())
   nome String 
-  tombamento String @Unique 
+  tombamento String @unique 
   tipo String 
   marca String
   modelo String
@@ -62,7 +62,7 @@ model Equipamento{
 }
 
 model Ticket{
-  id   String
+  id   String  @id @default(uuid())
   titulo String
   descricao String 
   prioridade Prioridade @default(MEDIA)
@@ -75,7 +75,7 @@ model Ticket{
 
   equipamento Equipamento @relation(fields: [equipamentoId], references:[id])    //fields: qual campo do model autal estou usando para fazer a ligacao , references: qual campo do outro model esse equipmentId esta apontando
   solicitante User @relation("TicketRequester", fields: [solicitanteId], references:[id])
-  tecninco    User? @relacionamento("TicketTechnician", fields: [tecnincoId], references:[id])
+  tecninco    User? @relation("TicketTechnician", fields: [tecnincoId], references:[id])
   manutencoes Manutencao[]
 
   @@map("tickets")
@@ -86,7 +86,7 @@ model Manutencao{
   ticketId String
   tecnicoId String 
   descricao String 
-  custo     float
+  custo     Float
   startedAt  DateTime
   finishedAt DateTime
   createdAt  DateTime @default(now())
