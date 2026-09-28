@@ -1,4 +1,5 @@
 import express from 'express';   //importando o express pra dentro do ccódigo
+import { prisma } from './config/prisma';
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
 
@@ -11,5 +12,12 @@ app.get('/health',(req,res)=>{
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
 app.listen(PORT,()=>{
-    console.log('servidor rodando na porta ${PORT}');
-})
+    console.log(`servidor rodando na porta ${PORT}`);
+});
+
+prisma.$connect()
+  .then(() => console.log('Banco conectado'))
+  .catch((error) => {
+    console.error('Erro ao conectar ao banco:', error);
+    process.exit(1);
+  });
