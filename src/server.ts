@@ -1,5 +1,6 @@
 import express from 'express';   //importando o express pra dentro do ccódigo
 import { prisma } from './config/prisma';
+import {equipamentoRoutes} from './routes/equipamentoRoutes.js'
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
 
@@ -8,6 +9,8 @@ app.use(express.json());  // essa linha é um middleware o express.json serve pr
 app.get('/health',(req,res)=>{
     return res.json({status: 'ok', message: 'FixIt API rodando com sucesso!'}); //tem o caminho da requisição get e uma mensagem de retorno.
 });
+
+app.use('/equipamentos', equipamentoRoutes);
 
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
