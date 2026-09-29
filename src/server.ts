@@ -1,6 +1,7 @@
 import express from 'express';   //importando o express pra dentro do ccódigo
 import { prisma } from './config/prisma';
 import {equipamentoRoutes} from './routes/equipamentoRoutes.js'
+import { userRoutes } from './routes/userRoutes';
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
 
@@ -11,6 +12,7 @@ app.get('/health',(req,res)=>{
 });
 
 app.use('/equipamentos', equipamentoRoutes);
+app.use('/users', userRoutes);
 
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
