@@ -43,7 +43,7 @@ export class UserService{
     async update(id: string , data: Prisma.UserUpdateInput): Promise<UserResponse>{
         await this.findById(id);
 
-        if(data.password && typeof data.password === 'string'){
+        if(data.password && typeof data.password === 'string'){ //veriica se existe uma senha e se existir verifica se ela é uma string para transformar para hash.
             data.password= await bcrypt.hash(data.password,8);
         }
         const updatedUser= await prisma.user.update({
