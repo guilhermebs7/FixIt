@@ -41,10 +41,9 @@ export class EquipamentoController{
             return res.status(400).json({message : error.message});
         }
     }
-    async delete(req: Request<{id: string}>  //força dizendo que o id é do tipo string e n string[] porque o controller n sabe se é apenas uma ou um array
-        , res:Response): Promise<Response>{     
+    async delete(req: Request, res:Response): Promise<Response>{      
     try {
-      const { id } = req.params;
+      const  id  = String(req.params.id);
       await equipamentoService.delete(id);
       return res.status(204).send();
     } catch (error: any) {
