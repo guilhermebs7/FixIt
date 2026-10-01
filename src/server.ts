@@ -3,7 +3,9 @@ import { prisma } from './config/prisma';
 import {equipamentoRoutes} from './routes/equipamentoRoutes.js'
 import { userRoutes } from './routes/userRoutes';
 import { sessionRoutes } from './routes/authenticateRoutes';
+import { ticketRoutes } from './routes/ticketRoutes';
 import { ensureAuthenticated } from './middlewares/ensureAuthenticated.js';
+
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
 
@@ -15,6 +17,7 @@ app.get('/health',(req,res)=>{
 
 app.use('/equipamentos',ensureAuthenticated, equipamentoRoutes); //rotas de equipamentos protegidas por Autenticação jwt
 app.use('/users', userRoutes);
+app.use('/tickets', ensureAuthenticated, ticketRoutes);
 app.use(sessionRoutes); //rota de autenticação
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
