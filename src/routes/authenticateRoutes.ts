@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { AuthenticateUserController } from '@/controllers/AuthenticateUserController';
-
+import { validateSchema } from '@/middlewares/validateSchema';
+import { loginSchema } from '@/schemas/UserSchema';
 /**
  * @openapi
  * /sessions:
@@ -33,6 +34,8 @@ import { AuthenticateUserController } from '@/controllers/AuthenticateUserContro
 const sessionRoutes = Router();
 const authenticateUserController = new AuthenticateUserController();
 
-sessionRoutes.post('/sessions', (req, res) => authenticateUserController.handle(req, res));
+sessionRoutes.post('/sessions',
+    validateSchema({body:loginSchema}),
+     (req, res) => authenticateUserController.handle(req, res));
 
 export { sessionRoutes };
