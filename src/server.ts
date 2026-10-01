@@ -6,6 +6,8 @@ import { sessionRoutes } from './routes/authenticateRoutes';
 import { ticketRoutes } from './routes/ticketRoutes';
 import { ensureAuthenticated } from './middlewares/ensureAuthenticated.js';
 import { manutencaoRoutes } from './routes/manutencaoRoutes';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger.js';
 
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
@@ -21,6 +23,8 @@ app.use('/users', userRoutes);
 app.use('/tickets', ensureAuthenticated, ticketRoutes);
 app.use(sessionRoutes); //rota de autenticação
 app.use('/manutencoes',ensureAuthenticated, manutencaoRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
 app.listen(PORT,()=>{
