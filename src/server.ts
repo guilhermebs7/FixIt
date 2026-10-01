@@ -5,6 +5,7 @@ import { userRoutes } from './routes/userRoutes';
 import { sessionRoutes } from './routes/authenticateRoutes';
 import { ticketRoutes } from './routes/ticketRoutes';
 import { ensureAuthenticated } from './middlewares/ensureAuthenticated.js';
+import { manutencaoRoutes } from './routes/manutencaoRoutes';
 
 
 const app = express();   //executando o express e guardando o resultado na variável app, podemos dizer que o app é o servidor
@@ -19,6 +20,7 @@ app.use('/equipamentos',ensureAuthenticated, equipamentoRoutes); //rotas de equi
 app.use('/users', userRoutes);
 app.use('/tickets', ensureAuthenticated, ticketRoutes);
 app.use(sessionRoutes); //rota de autenticação
+app.use('/manutencoes',ensureAuthenticated, manutencaoRoutes);
 const PORT= process.env.PORT || 3333;   // definindo em qual porta o servidor vai rodar;
 
 app.listen(PORT,()=>{
