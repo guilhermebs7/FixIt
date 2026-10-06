@@ -1,11 +1,15 @@
 import { Router } from "express";        //permite criar um conjunto de rotas separado
 import { EquipamentoController } from "@/controllers/EquipamentoController";
 import { ensureAdmin } from "@/middlewares/ensureAdmin";
+import { validateSchema } from "@/middlewares/validateSchema";
+import { createEquipmentSchema } from "@/schemas/EquipamentoSchema";
 
 const equipamentoRoutes= Router();       
 const equipamentoController= new EquipamentoController();
 
-equipamentoRoutes.post('/',(req, res)=>equipamentoController.create(req, res));
+equipamentoRoutes.post('/',
+    validateSchema({body:createEquipmentSchema}),
+    (req, res)=>equipamentoController.create(req, res));
 equipamentoRoutes.get('/',(req, res)=>equipamentoController.findAll(req, res));
 equipamentoRoutes.get('/:id',(req, res)=>equipamentoController.findById(req, res));
 equipamentoRoutes.put('/:id',(req, res)=>equipamentoController.update(req, res));
